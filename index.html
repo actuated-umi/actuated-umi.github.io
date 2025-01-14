@@ -1,1 +1,202 @@
-actuated-UMI
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Actuated-UMI</title>
+
+        <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="assets/css/styles.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+        <script src="https://tarptaeya.github.io/repo-card/repo-card.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <div class="logo-container">
+                <a href="https://arise-robotics.eu" target="_blank"
+                    ><img src="assets/images/Arise.png" alt="ARISE"
+                /></a>
+                <a href="https://www.tu-darmstadt.de/" target="_blank"
+                    ><img src="assets/images/TU_Darmstadt_Logo.svg" alt="TUDa"
+                /></a>
+                <a href="https://www.ias.informatik.tu-darmstadt.de/" target="_blank"
+                    ><img src="assets/images/IAS_vectorized.svg" alt="IAS"
+                /></a>
+            </div>
+        </header>
+
+        <div class="container">
+            <h1 class="flexible-heading">
+                Actuated UMI Gripper
+            </h1>
+
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/XodgLZ3qirM"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                ></iframe>
+            </div>
+
+            <p class="abstract">
+                The Actuated UMI Gripper is an open-source, modular, and cost-efficient robotic gripper 
+                that enables the transfer of human demonstrations, captured using the <a href="https://umi-gripper.github.io" target="_blank">UMI Gripper</a>, to robotic systems. 
+                Designed for 3D printing and powered by a Dynamixel motor, it is customizable and easy 
+                to integrate with various robotic arms. This gripper is a powerful tool for robotics research, 
+                enabling robots to replicate complex manipulation tasks with precision and adaptability.
+            </p>
+
+            <hr class="section-divider" />
+
+            <h2>CAD Model and Control Software</h2>
+            <div class="repo-container">
+                <div
+                    class="repo-card"
+                    data-repo="actuated-umi/actuated-umi-gripper"
+                    data-theme="dark-theme"
+                ></div>
+                <div
+                    class="repo-card"
+                    data-repo="TimSchneider42/dynamixel-api"
+                    data-theme="dark-theme"
+                ></div>
+            </div>
+
+            <br />
+            
+            <div id="stl-viewer" style="width: 100%; height: 500px;"></div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const container = document.getElementById('stl-viewer');
+            
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ antialias: true });
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                    renderer.setClearColor(0x121212);
+                    container.appendChild(renderer.domElement);
+            
+                    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                    controls.enableDamping = true;
+                    controls.dampingFactor = 0.25;
+                    controls.screenSpacePanning = true;
+                    controls.minDistance = 1;
+                    controls.maxDistance = 1000;
+            
+                    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+                    directionalLight.position.set(1, 1, 1).normalize();
+                    scene.add(directionalLight);
+            
+                    const ambientLight = new THREE.AmbientLight(0x404040);
+                    scene.add(ambientLight);
+            
+                    const loader = new THREE.STLLoader();
+                    loader.load('assets/models/actuated-UMI-assy.stl', function (geometry) {
+                        const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+                        const mesh = new THREE.Mesh(geometry, material);
+                        mesh.position.set(0, 0, 0);
+                        mesh.rotation.x = Math.PI;
+                        mesh.rotation.y = Math.PI/2;
+                        scene.add(mesh);
+                    });
+            
+                    camera.position.set(200, 150, 200);
+                    camera.lookAt(0, 0, 0);
+            
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        controls.update();
+                        renderer.render(scene, camera);
+                    }
+            
+                    animate();
+            
+                    window.addEventListener('resize', function () {
+                        camera.aspect = container.clientWidth / container.clientHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(container.clientWidth, container.clientHeight);
+                    });
+                });
+            </script>
+
+            <hr class="section-divider" />
+
+            <h2>Team</h2>
+            <div class="team-container">
+                <div class="team-member">
+                    <a href="https://github.com/erikhelmut" target="_blank">
+                        <img
+                            src="assets/images/erik.png"
+                            alt="Erik"
+                            class="team-photo"
+                        />
+                        <p class="team-name">Erik Helmut<sup>*1</sup></p>
+                    </a>
+                </div>
+                <div class="team-member">
+                    <a href="https://niklasfunk.com/" target="_blank">
+                        <img
+                            src="assets/images/niklas.png"
+                            alt="Niklas"
+                            class="team-photo"
+                        />
+                        <p class="team-name">Niklas Funk<sup>*2</sup></p>
+                    </a>
+                </div>
+                <div class="team-member">
+                    <a href="https://www.ias.informatik.tu-darmstadt.de/Team/TimSchneider" target="_blank">
+                        <img
+                            src="assets/images/tim.jpg"
+                            alt="Tim"
+                            class="team-photo"
+                        />
+                        <p class="team-name">Tim Schneider<sup>2</sup></p>
+                    </a>
+                </div>
+                <div class="team-member">
+                    <a
+                        href="https://www.ias.informatik.tu-darmstadt.de/Team/JanPeters"
+                        target="_blank"
+                    >
+                        <img
+                            src="assets/images/jan.png"
+                            alt="Jan"
+                            class="team-photo"
+                        />
+                        <p class="team-name">Jan Peters<sup>2,3,4,5</sup></p>
+                    </a>
+                </div>
+            </div>
+            <p class="team-faculty">
+                <sup>*</sup>Authors contributed equally
+                &nbsp;<sup>1</sup>Department of Computational Engineering,
+                Technical University of Darmstadt &nbsp;<sup>2</sup>Department
+                of Computer Science, Technical University of Darmstadt
+                &nbsp;<sup>3</sup>German Research Center for AI (DFKI)
+                &nbsp;<sup>4</sup>Centre for Cognitive Science, Technical
+                University of Darmstadt &nbsp;<sup>5</sup>Hessian Center for
+                Artificial Intelligence (Hessian.AI), Darmstadt
+            </p>
+
+            <br />
+            <h2>BibTeX</h2>
+            <div class="terminal">
+                <pre>
+@inproceedings{helmut2024actuatedumi,
+  author = {Helmut, Erik and Funk, Niklas and Schneider, Tim and Peters, Jan},
+  title = {Actuated Version of the Universal Manipulation Interface Gripper},
+  year = {2024},
+  url  = {https://actuated-umi.github.io/}
+}
+                </pre>
+            </div>
+        </div>
+    </body>
+</html>
